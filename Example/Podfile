@@ -1,0 +1,6 @@
+use_frameworks!
+target 'OneSolutionTextField_Tests' do
+  pod 'OneSolutionTextField', :path => '../'
+  
+  
+end
