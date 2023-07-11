@@ -1,0 +1,22 @@
+{
+  "name": "OneSolutionTextField",
+  "version": "0.1.0",
+  "summary": "A short description of OneSolutionTextField.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/sreekanth reddy Tadi/OneSolutionTextField",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "sreekanth reddy Tadi": "sreekanth.t.bs@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/sreekanth reddy Tadi/OneSolutionTextField.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "10.0"
+  },
+  "source_files": "OneSolutionTextField/Classes/**/*"
+}
