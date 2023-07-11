@@ -1,0 +1,16 @@
+PODS:
+  - OneSolutionTextField (0.0.1)
+
+DEPENDENCIES:
+  - OneSolutionTextField (from `../`)
+
+EXTERNAL SOURCES:
+  OneSolutionTextField:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  OneSolutionTextField: 382e0ebe66d1423b06c810acffcea92ca4a93524
+
+PODFILE CHECKSUM: 589e3e2ee5f29440c54f6197429648c2f5d93b4b
+
+COCOAPODS: 1.12.1

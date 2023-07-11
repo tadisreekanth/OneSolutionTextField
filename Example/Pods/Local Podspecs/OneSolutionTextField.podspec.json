@@ -1,6 +1,6 @@
 {
   "name": "OneSolutionTextField",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "summary": "A short description of OneSolutionTextField.",
   "description": "TODO: Add long description of the pod here.",
   "homepage": "https://github.com/tadisreekanth/OneSolutionTextField",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/tadisreekanth/OneSolutionTextField.git",
-    "tag": "0.1.0"
+    "tag": "0.0.1"
   },
   "platforms": {
     "ios": "10.0"
