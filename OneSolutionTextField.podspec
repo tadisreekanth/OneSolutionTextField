@@ -30,7 +30,7 @@ TODO: Add long description of the pod here.
 
   s.ios.deployment_target = '13.0'
 
-  s.source_files = 'OneSolutionTextField/Classes/**/*'
+  s.source_files = 'OneSolutionTextField/**/*'
   
   # s.resource_bundles = {
   #   'OneSolutionTextField' => ['OneSolutionTextField/Assets/*.png']
