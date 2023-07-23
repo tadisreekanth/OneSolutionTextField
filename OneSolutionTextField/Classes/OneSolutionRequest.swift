@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import OneSolutionAPI
 
-struct OneSolutionRequest {
+public struct OneSolutionRequest {
     
     var url = ""
     var reqParams: NSDictionary?
@@ -17,20 +18,20 @@ struct OneSolutionRequest {
     
     var selectedObject: OneSolutionModel?
     
-    init() {
+    public init() {
         url = ""
         reqParams = NSDictionary ()
         searchKey = ""
     }
     
-    init (url_String: String, requestParams: NSDictionary, searchValueKey: String) {
+    public init (url_String: String, requestParams: NSDictionary, searchValueKey: String) {
         url = url_String
         reqParams = requestParams
         searchKey = searchValueKey
     }
 }
 
-extension OneSolutionRequest {
+public extension OneSolutionRequest {
     
     mutating func updateRequestParams (requestParams: NSDictionary) {
         reqParams = requestParams

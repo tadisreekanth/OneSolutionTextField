@@ -8,6 +8,8 @@
 import Foundation
 import SwiftUI
 import Combine
+import OneSolutionUtility
+import OneSolutionAPI
 
 public class OneSolutionTextFieldViewModel: ObservableObject {
 
@@ -21,13 +23,13 @@ public class OneSolutionTextFieldViewModel: ObservableObject {
     @Published public private(set) var showClear: Bool
     public private(set) var request: OneSolutionRequest?
     @Published public private(set) var callAPIWhenTextChanged: Bool
-    
-    public private(set) var onRightImageTap: noParamsHandler?
-    public private(set) var onTextChange: noParamsHandler?
-    public private(set) var onClearTap: noParamsHandler?
-    public private(set) var onAPIResponse: ((Data) -> Void)?
-    public private(set) var onSelected: ((OneSolutionModel) -> Void)?
-    public private(set) var objectType: OneSolutionModel.Type?
+    public var objectType: OneSolutionModel.Type?
+
+    public var onRightImageTap: noParamsHandler?
+    public var onTextChange: noParamsHandler?
+    public var onClearTap: noParamsHandler?
+    public var onAPIResponse: ((Data) -> Void)?
+    public var onSelected: ((OneSolutionModel) -> Void)?
     
     
     @Published public private(set) var models: [OneSolutionModel]?
@@ -44,12 +46,12 @@ public class OneSolutionTextFieldViewModel: ObservableObject {
          request: OneSolutionRequest? = nil,
          canEdit: Bool = true,
          canChangeRightMode: Bool = false,
+         objectType: OneSolutionModel.Type? = nil,
          onRightImageTap: noParamsHandler? = nil,
          onTextChange: noParamsHandler? = nil,
          onClearTap: noParamsHandler? = nil,
          onAPIResponse: ((Data) -> Void)? = nil,
-         onSelected: ((OneSolutionModel) -> Void)? = nil,
-         objectType: OneSolutionModel.Type? = nil) {
+         onSelected: ((OneSolutionModel) -> Void)? = nil) {
         self.input = input
         self.placeholder = placeholder
         self.showRightView = showRightView
@@ -59,19 +61,19 @@ public class OneSolutionTextFieldViewModel: ObservableObject {
         self.request = request
         self.canEdit = canEdit
         self.canChangeRightMode = canChangeRightMode
+        self.objectType = objectType
         self.onRightImageTap = onRightImageTap
         self.onTextChange = onTextChange
         self.onClearTap = onClearTap
         self.onAPIResponse = onAPIResponse
         self.onSelected = onSelected
-        self.objectType = objectType
     }
 }
 
 //MARK: - Request updates
 public extension OneSolutionTextFieldViewModel {
     
-    public func updateSearchValue () {
+    func updateSearchValue () {
         if let _ = request?.reqParams,
            let searchKey = request?.searchKey {
             if !searchKey.isEmpty {
@@ -80,14 +82,14 @@ public extension OneSolutionTextFieldViewModel {
         }
     }
     
-    public func updateRequest(request: OneSolutionRequest) {
+    func updateRequest(request: OneSolutionRequest) {
         self.request = request
     }
 }
 
 //MARK: - Repsonse Updates
 public extension OneSolutionTextFieldViewModel {
-    public func update(models: [OneSolutionModel]?) {
+    func update(models: [OneSolutionModel]?) {
         self.models = models
         objectWillChange.send()
     }

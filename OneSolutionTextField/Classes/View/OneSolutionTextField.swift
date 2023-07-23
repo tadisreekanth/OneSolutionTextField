@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Combine
+import OneSolutionUtility
 
 struct OneSolutionTextField: View {
     
@@ -150,9 +151,10 @@ struct OneSolutionTextField: View {
                     }
                 }
                 .listStyle(.plain)
-            } else if viewModel.showProgress {
-                ProgressView()
             }
+//            else if viewModel.showProgress {
+//                Progress()
+//            }
         }
     }
     

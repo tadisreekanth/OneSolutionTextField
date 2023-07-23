@@ -6,15 +6,7 @@
 //
 
 import Foundation
-
-public protocol OneSolutionModel: Decodable {
-    public var uuid: UUID { get set }
-    public var id: String? { get set }
-    public var name: String? { get set }
-    public var params: [String: QuantumValue]? { get set }
-    
-    public init(dict: [String: QuantumValue])
-}
+import OneSolutionAPI
 
 public struct Serial: OneSolutionModel {
     public var uuid = UUID()
