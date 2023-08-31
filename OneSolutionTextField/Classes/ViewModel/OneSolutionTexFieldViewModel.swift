@@ -18,6 +18,7 @@ public class OneSolutionTextFieldViewModel: ObservableObject {
     public private(set) var canChangeRightMode: Bool
 
     @Published var input: String
+    @Published var userInput: String
     @Published public private(set) var showRightView: Bool
     @Published public private(set) var rightIcon: AssetIcon
     @Published public private(set) var showClear: Bool
@@ -36,6 +37,7 @@ public class OneSolutionTextFieldViewModel: ObservableObject {
     var showProgress = false
     var isClearAction = false
     var task: Task<Void, Never>?
+    var cancellables = Set<AnyCancellable>()
     
     init(input: String,
          placeholder: String = "",
@@ -53,6 +55,7 @@ public class OneSolutionTextFieldViewModel: ObservableObject {
          onAPIResponse: ((Data) -> Void)? = nil,
          onSelected: ((OneSolutionModel) -> Void)? = nil) {
         self.input = input
+        self.userInput = input
         self.placeholder = placeholder
         self.showRightView = showRightView
         self.rightIcon = rightIcon
@@ -67,8 +70,21 @@ public class OneSolutionTextFieldViewModel: ObservableObject {
         self.onClearTap = onClearTap
         self.onAPIResponse = onAPIResponse
         self.onSelected = onSelected
+        
+        self.subscribeToInput()
     }
 }
+
+//MARK: Subscribers
+extension OneSolutionTextFieldViewModel {
+    func subscribeToInput() {
+        self.$userInput.sink { [weak self] _ in
+            self?.updateSearchValue()
+        }
+        .store(in: &cancellables)
+    }
+}
+
 
 //MARK: - Request updates
 public extension OneSolutionTextFieldViewModel {
@@ -91,7 +107,7 @@ public extension OneSolutionTextFieldViewModel {
 public extension OneSolutionTextFieldViewModel {
     func update(models: [OneSolutionModel]?) {
         self.models = models
-        objectWillChange.send()
+//        objectWillChange.send()
     }
 }
 

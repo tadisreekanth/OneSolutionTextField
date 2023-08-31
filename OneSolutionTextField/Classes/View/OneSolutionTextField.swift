@@ -11,8 +11,7 @@ import OneSolutionUtility
 
 struct OneSolutionTextField: View {
     
-    public var viewModel: OneSolutionTextFieldViewModel
-    @State var text: String = ""
+    @ObservedObject public var viewModel: OneSolutionTextFieldViewModel    
     
     public init(viewModel: OneSolutionTextFieldViewModel) {
         self.viewModel = viewModel
@@ -38,21 +37,15 @@ struct OneSolutionTextField: View {
                         .cornerRadius(0.5)
                 }
             )
-            if !(text.trimmed.isEmpty) {
+            if !(text.isEmpty) {
                 textResults
             }
-        }
-        .onAppear {
-            self.text = self.viewModel.input
         }
     }
     
     private var textField: some View {
-        TextField(viewModel.placeholder ?? "Enter Keyword", text: $text)
+        TextField(viewModel.placeholder ?? "Enter Keyword", text: $viewModel.userInput)
             .font(.system(size: textFieldFont))
-            .onChange(of: text) { newValue in
-                self.textChanged()
-            }
             .basicHeight()
             .padding(.leading, 10)
             .disabled(!viewModel.canEdit)
@@ -60,7 +53,7 @@ struct OneSolutionTextField: View {
     
     private var canShowRightView: Bool {
         if viewModel.showRightView && viewModel.showClear {
-            if text.trimmed.isEmpty {
+            if text.isEmpty {
                 if !rightIconName.isEmpty {
                     return true
                 }
@@ -68,11 +61,11 @@ struct OneSolutionTextField: View {
                 return true
             }
         } else if viewModel.showRightView {
-            if text.trimmed.isEmpty, !rightIconName.isEmpty {
+            if text.isEmpty, !rightIconName.isEmpty {
                 return true
             }
         } else if viewModel.showClear {
-            if !(text.trimmed.isEmpty) {
+            if !text.isEmpty {
                 return true
             }
         }
@@ -82,7 +75,7 @@ struct OneSolutionTextField: View {
     private var textFieldRightView: some View {
         HStack (spacing: 0) {
             if viewModel.showRightView && viewModel.showClear {
-                if text.trimmed.isEmpty {
+                if text.isEmpty {
                     if !rightIconName.isEmpty {
                         rightView
                     }
@@ -90,11 +83,11 @@ struct OneSolutionTextField: View {
                     clearView
                 }
             } else if viewModel.showRightView {
-                if text.trimmed.isEmpty, !rightIconName.isEmpty {
+                if text.isEmpty, !rightIconName.isEmpty {
                     rightView
                 }
             } else if viewModel.showClear {
-                if !(text.trimmed.isEmpty) {
+                if !(text.isEmpty) {
                     clearView
                 }
             }
@@ -159,14 +152,14 @@ struct OneSolutionTextField: View {
     }
     
     private var iconWidth: CGFloat {
-        if !text.trimmed.isEmpty { return 14 }
+        if !text.isEmpty { return 14 }
         if viewModel.rightIcon == .calender {
             return 34
         }
         return 24
     }
     private var rightIconPadding: CGFloat {
-        if !text.trimmed.isEmpty { return 10 }
+        if !text.isEmpty { return 10 }
         if viewModel.rightIcon == .calender {
             return 2
         }
@@ -178,7 +171,14 @@ struct OneSolutionTextField: View {
     }
 }
 
-//MARK: - Action
+//MARK: Helper
+extension OneSolutionTextField {
+    var text: String {
+        viewModel.userInput.trimmed
+    }
+}
+
+//MARK: Action
 
 
 
@@ -203,23 +203,6 @@ struct OneSolutionTextField_Previews: PreviewProvider {
                                                                   placeholder: "Placeholder",
                                                                   showRightView: true,
                                                                   rightIcon: .camera))
-                        
-//            OneSolutionTextField(input: Binding.constant(""),
-//                                 showRightView: true,
-//                                 rightIconName: icon_down_arrow,
-//                                 showClear: true,
-//                                 callAPIWhenTextChanged: false,
-//                                 objectType: nil)
-//            OneSolutionTextField(input: Binding.constant(""),
-//                                 showRightView: true,
-//                                 rightIconName: icon_calender,
-//                                 showClear: true,
-//                                 callAPIWhenTextChanged: false)
-//            OneSolutionTextField(input: Binding.constant(""),
-//                                 showRightView: true,
-//                                 rightIconName: icon_camera,
-//                                 showClear: true,
-//                                 callAPIWhenTextChanged: false)
             Spacer()
         }
         .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))

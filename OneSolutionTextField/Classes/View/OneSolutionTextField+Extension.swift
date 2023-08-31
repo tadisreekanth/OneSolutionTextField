@@ -6,17 +6,17 @@
 //
 
 import SwiftUI
+import OneSolutionUtility
+import OneSolutionAPI
 
 extension OneSolutionTextField {
     
     func textChanged() {
         if !viewModel.isClearAction {
-            self.viewModel.input = self.text
             self.viewModel.onTextChange?()
             if viewModel.callAPIWhenTextChanged {
                 if !text.trimmed.isEmpty {
                     viewModel.showProgress = true
-                    viewModel.updateSearchValue()
                     callTextFieldAPI()
                 }
             }
@@ -26,26 +26,23 @@ extension OneSolutionTextField {
     
     func onClearTapped() {
         self.viewModel.isClearAction = true
-        self.text = ""
-        self.viewModel.input = self.text
+        self.viewModel.userInput = ""
         self.viewModel.onClearTap?()
     }
-    
 }
     
-
 extension OneSolutionTextField {
     
     func callTextFieldAPI() {
         guard let request = viewModel.request, !request.url.isEmpty else { return }
         viewModel.task?.cancel()
         viewModel.task = Task {
-            let result = await OneSolutionTextFieldAPI.shared.fetchData(with: request)
+            let result = await OneSolutionTextFieldAPI.instance.fetchData(with: request)
             viewModel.showProgress = false
             switch result {
             case .success(let model):
                 if let type = viewModel.objectType {
-                    viewModel.update(models: model.models(of: type))
+                    viewModel.update(models: model.models(type))
                 }
             case .failure(let error):
                 switch error {
