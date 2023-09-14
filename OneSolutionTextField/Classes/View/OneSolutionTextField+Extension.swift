@@ -9,7 +9,7 @@ import SwiftUI
 import OneSolutionUtility
 import OneSolutionAPI
 
-extension OneSolutionTextField {
+public extension OneSolutionTextField {
     
     func textChanged() {
         if !viewModel.isClearAction {
@@ -31,7 +31,7 @@ extension OneSolutionTextField {
     }
 }
     
-extension OneSolutionTextField {
+public extension OneSolutionTextField {
     
     func callTextFieldAPI() {
         guard let request = viewModel.request, !request.url.isEmpty else { return }

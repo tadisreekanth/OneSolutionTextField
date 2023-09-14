@@ -9,15 +9,15 @@ import SwiftUI
 import Combine
 import OneSolutionUtility
 
-struct OneSolutionTextField: View {
+public struct OneSolutionTextField: View {
     
-    @ObservedObject public var viewModel: OneSolutionTextFieldViewModel    
+    @ObservedObject public var viewModel: OneSolutionTextFieldViewModel
     
     public init(viewModel: OneSolutionTextFieldViewModel) {
         self.viewModel = viewModel
     }
     
-    var body: some View {
+    public var body: some View {
         VStack {
             HStack (spacing: 0) {
                 textField
@@ -145,9 +145,9 @@ struct OneSolutionTextField: View {
                 }
                 .listStyle(.plain)
             }
-//            else if viewModel.showProgress {
-//                Progress()
-//            }
+            //            else if viewModel.showProgress {
+            //                Progress()
+            //            }
         }
     }
     

@@ -17,8 +17,7 @@ public class OneSolutionTextFieldViewModel: ObservableObject {
     public private(set) var canEdit: Bool
     public private(set) var canChangeRightMode: Bool
 
-    @Published var input: String
-    @Published var userInput: String
+    @Published public var userInput: String
     @Published public private(set) var showRightView: Bool
     @Published public private(set) var rightIcon: AssetIcon
     @Published public private(set) var showClear: Bool
@@ -26,9 +25,9 @@ public class OneSolutionTextFieldViewModel: ObservableObject {
     @Published public private(set) var callAPIWhenTextChanged: Bool
     public var objectType: OneSolutionModel.Type?
 
-    public var onRightImageTap: noParamsHandler?
-    public var onTextChange: noParamsHandler?
-    public var onClearTap: noParamsHandler?
+    public var onRightImageTap: EmptyParamsHandler?
+    public var onTextChange: EmptyParamsHandler?
+    public var onClearTap: EmptyParamsHandler?
     public var onAPIResponse: ((Data) -> Void)?
     public var onSelected: ((OneSolutionModel) -> Void)?
     
@@ -39,22 +38,21 @@ public class OneSolutionTextFieldViewModel: ObservableObject {
     var task: Task<Void, Never>?
     var cancellables = Set<AnyCancellable>()
     
-    init(input: String,
-         placeholder: String = "",
-         showRightView: Bool = false,
-         rightIcon: AssetIcon = .empty,
-         showClear: Bool = false,
-         callAPIWhenTextChanged: Bool = false,
-         request: OneSolutionRequest? = nil,
-         canEdit: Bool = true,
-         canChangeRightMode: Bool = false,
-         objectType: OneSolutionModel.Type? = nil,
-         onRightImageTap: noParamsHandler? = nil,
-         onTextChange: noParamsHandler? = nil,
-         onClearTap: noParamsHandler? = nil,
-         onAPIResponse: ((Data) -> Void)? = nil,
-         onSelected: ((OneSolutionModel) -> Void)? = nil) {
-        self.input = input
+    public init(input: String,
+                placeholder: String = "",
+                showRightView: Bool = false,
+                rightIcon: AssetIcon = .empty,
+                showClear: Bool = false,
+                callAPIWhenTextChanged: Bool = false,
+                request: OneSolutionRequest? = nil,
+                canEdit: Bool = true,
+                canChangeRightMode: Bool = false,
+                objectType: OneSolutionModel.Type? = nil,
+                onRightImageTap: EmptyParamsHandler? = nil,
+                onTextChange: EmptyParamsHandler? = nil,
+                onClearTap: EmptyParamsHandler? = nil,
+                onAPIResponse: ((Data) -> Void)? = nil,
+                onSelected: ((OneSolutionModel) -> Void)? = nil) {
         self.userInput = input
         self.placeholder = placeholder
         self.showRightView = showRightView
@@ -93,7 +91,7 @@ public extension OneSolutionTextFieldViewModel {
         if let _ = request?.reqParams,
            let searchKey = request?.searchKey {
             if !searchKey.isEmpty {
-                request?.update(key: searchKey, value: input)
+                request?.update(key: searchKey, value: userInput)
             }
         }
     }
@@ -112,7 +110,14 @@ public extension OneSolutionTextFieldViewModel {
 }
 
 public extension OneSolutionTextFieldViewModel {
-    private func updateClosure (action: noParamsHandler?) {
+    private func updateClosure (action: EmptyParamsHandler?) {
         self.onTextChange = action
+    }
+}
+    
+//MARK: update UserInput
+public extension OneSolutionTextFieldViewModel {
+    func update(input: String) {
+        self.userInput = input
     }
 }
