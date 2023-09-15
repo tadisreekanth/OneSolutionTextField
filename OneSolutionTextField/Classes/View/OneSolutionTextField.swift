@@ -126,7 +126,7 @@ public struct OneSolutionTextField: View {
                 self.viewModel.onClearTap?()
                 self.onClearTapped()
             } label: {
-                Image(AssetIcon.close.rawValue)
+                AssetIcon.close.image
                     .resizable()
                     .frame(width: width, height: width, alignment: .center)
             }
