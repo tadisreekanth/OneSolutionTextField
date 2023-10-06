@@ -107,8 +107,7 @@ public struct OneSolutionTextField: View {
                     self.callTextFieldAPI()
                 }
             } label: {
-                Image(rightIconName)
-                    .resizable()
+                viewModel.rightIcon.image
                     .aspectRatio(contentMode: .fit)
                     .frame(maxWidth: width, maxHeight: width, alignment: .center)
             }
@@ -127,7 +126,6 @@ public struct OneSolutionTextField: View {
                 self.onClearTapped()
             } label: {
                 AssetIcon.close.image
-                    .resizable()
                     .frame(width: width, height: width, alignment: .center)
             }
             .padding(.trailing, padding)
