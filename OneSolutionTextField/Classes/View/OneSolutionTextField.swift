@@ -20,26 +20,36 @@ public struct OneSolutionTextField: View {
     public var body: some View {
         VStack {
             HStack (spacing: 0) {
-                textField
+                if viewModel.isUpperCasedText, #available(iOS 14.0, *) {
+                    textField
+                        .autocapitalization(.allCharacters)
+                } else {
+                    textField
+                }
+                
                 if canShowRightView {
                     textFieldRightView
                 }
             }
-            .background(Color.app_white)
+            .background(viewModel.canEdit ? Color.app_white : Color.gray)
             .cornerRadius(textFieldCornerRadius)
             .overlay(
-                VStack {
-                    Spacer()
-                    Divider()
-                        .frame(height: 1)
-                        .background(Color.app_green_border)
-                        .padding([.leading, .trailing], textFieldCornerRadius/2)
-                        .cornerRadius(0.5)
-                }
+                BorderLine()
             )
-            if !(text.isEmpty) {
-                textResults
+            
+            if viewModel.showProgress || !(viewModel.models?.isEmpty ?? true) {
+                SuggestionsView(
+                    models: viewModel.models,
+                    showProgress: viewModel.showProgress
+                ) { model in
+                    DispatchQueue.main.async {
+                        viewModel.onSuggestionSelection(model: model)
+                    }
+                }
             }
+        }
+        .onAppear {
+            self.viewModel.subscribeToInput()
         }
     }
     
@@ -54,14 +64,14 @@ public struct OneSolutionTextField: View {
     private var canShowRightView: Bool {
         if viewModel.showRightView && viewModel.showClear {
             if text.isEmpty {
-                if !rightIconName.isEmpty {
+                if isRightIconExists {
                     return true
                 }
             } else {
                 return true
             }
         } else if viewModel.showRightView {
-            if text.isEmpty, !rightIconName.isEmpty {
+            if text.isEmpty, viewModel.rightIcon != .empty {
                 return true
             }
         } else if viewModel.showClear {
@@ -76,14 +86,14 @@ public struct OneSolutionTextField: View {
         HStack (spacing: 0) {
             if viewModel.showRightView && viewModel.showClear {
                 if text.isEmpty {
-                    if !rightIconName.isEmpty {
+                    if isRightIconExists {
                         rightView
                     }
                 } else {
                     clearView
                 }
             } else if viewModel.showRightView {
-                if text.isEmpty, !rightIconName.isEmpty {
+                if text.isEmpty, isRightIconExists {
                     rightView
                 }
             } else if viewModel.showClear {
@@ -102,10 +112,9 @@ public struct OneSolutionTextField: View {
             Spacer()
             Button {
                 //down arrow action
-                viewModel.onRightImageTap?()
-                if self.viewModel.callAPIWhenTextChanged {
-                    self.callTextFieldAPI()
-                }
+//                DispatchQueue.global().async {
+                    viewModel.rightImageAction()
+//                }
             } label: {
                 viewModel.rightIcon.image
                     .aspectRatio(contentMode: .fit)
@@ -122,8 +131,7 @@ public struct OneSolutionTextField: View {
             let padding = rightIconPadding
             Spacer()
             Button {
-                self.viewModel.onClearTap?()
-                self.onClearTapped()
+                self.viewModel.onClearTapped()
             } label: {
                 AssetIcon.close.image
                     .frame(width: width, height: width, alignment: .center)
@@ -132,21 +140,12 @@ public struct OneSolutionTextField: View {
             .alignmentGuide(VerticalAlignment.center) { _ in 0 }
         }
     }
-    
-    private var textResults: some View {
-        VStack {
-            if let models = viewModel.models {
-                List {
-                    ForEach(models, id: \.uuid) { model in
-                        Text(model.name ?? "")
-                    }
-                }
-                .listStyle(.plain)
-            }
-            //            else if viewModel.showProgress {
-            //                Progress()
-            //            }
-        }
+}
+
+//MARK: Helper
+extension OneSolutionTextField {
+    var text: String {
+        viewModel.userInput.trimmed
     }
     
     private var iconWidth: CGFloat {
@@ -156,6 +155,7 @@ public struct OneSolutionTextField: View {
         }
         return 24
     }
+    
     private var rightIconPadding: CGFloat {
         if !text.isEmpty { return 10 }
         if viewModel.rightIcon == .calender {
@@ -164,21 +164,10 @@ public struct OneSolutionTextField: View {
         return 5
     }
     
-    private var rightIconName: String {
-        viewModel.rightIcon.rawValue
+    private var isRightIconExists: Bool {
+        viewModel.rightIcon != .empty
     }
 }
-
-//MARK: Helper
-extension OneSolutionTextField {
-    var text: String {
-        viewModel.userInput.trimmed
-    }
-}
-
-//MARK: Action
-
-
 
 //MARK: - Preview
 struct OneSolutionTextField_Previews: PreviewProvider {
