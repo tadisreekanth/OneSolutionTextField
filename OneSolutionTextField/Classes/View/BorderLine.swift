@@ -8,13 +8,19 @@
 import SwiftUI
 import OneSolutionUtility
 
-struct BorderLine: View {
-    var body: some View {
+public struct BorderLine: View {
+    var color: Color
+    
+    public init(color: Color = Color.app_green_border) {
+        self.color = color
+    }
+    
+    public var body: some View {
         VStack {
             Spacer()
             Divider()
                 .frame(height: 1)
-                .background(Color.app_green_border)
+                .background(color)
                 .padding(.horizontal, textFieldCornerRadius/2)
                 .cornerRadius(0.5)
         }
